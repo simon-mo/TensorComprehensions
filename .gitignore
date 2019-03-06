@@ -20,3 +20,4 @@ examples/results*
 test_python/tc_test/*
 install
 tc/benchmarks/results*
+tc_files.txt

@@ -120,6 +120,10 @@ DEFINE_uint64(
     tuner_min_launch_total_threads,
     64,
     "Prune out kernels mapped to fewer than this many threads and block");
+DEFINE_uint64(
+    tuner_max_blocks,
+    1024,
+    "Prune out kernels mapped to larger than this number of blocks");
 DEFINE_int64(
     random_seed,
     -1,

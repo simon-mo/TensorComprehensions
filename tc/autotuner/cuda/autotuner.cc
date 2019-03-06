@@ -82,6 +82,7 @@ bool skipExecutionOrWarmup<CudaBackend>(
   // for stress-testing autotuning.
   auto debugTuner = FLAGS_debug_tuner;
   auto minThreads = FLAGS_tuner_min_launch_total_threads;
+  auto maxBlocks = FLAGS_tuner_max_blocks;
   USING_MAPPING_SHORT_NAMES(BX, BY, BZ, TX, TY, TZ);
   auto block = executor.block();
   auto nThreads =
@@ -89,9 +90,15 @@ bool skipExecutionOrWarmup<CudaBackend>(
   auto grid = executor.grid();
   auto nBlocks =
       BX.mappingSize(grid) * BY.mappingSize(grid) * BZ.mappingSize(grid);
+
   if (nBlocks * nThreads < minThreads) {
     LOG_IF(INFO, debugTuner)
         << "Skip configuration: too few threads " << grid << " / " << block;
+    return true;
+  } else if (nBlocks > maxBlocks) {
+    LOG_IF(INFO, debugTuner)
+        << "Skip configuration: too many blocks " << grid << " / " << block
+        << "\n Max blocks is defined to be " << maxBlocks;
     return true;
   } else {
     LOG_IF(INFO, debugTuner)

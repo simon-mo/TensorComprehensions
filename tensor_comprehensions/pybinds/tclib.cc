@@ -287,6 +287,7 @@ class TunerConfig {
         mutationRate_(tc::FLAGS_tuner_gen_mutation_rate),
         numberElites_(tc::FLAGS_tuner_gen_number_elites),
         tunerMinLaunchTotalThreads_(tc::FLAGS_tuner_min_launch_total_threads),
+        tunerMaxBlocks_(tc::FLAGS_tuner_max_blocks),
         threads_(tc::FLAGS_tuner_threads),
         devices_(tc::FLAGS_tuner_devices),
         logtostderr_(false),
@@ -317,6 +318,10 @@ class TunerConfig {
     tunerMinLaunchTotalThreads_ = val;
     return *this;
   }
+  TunerConfig& tunerMaxBlocks(uint32_t val) {
+    tunerMaxBlocks_ = val;
+    return *this;
+  }
   TunerConfig& threads(uint32_t val) {
     threads_ = val;
     return *this;
@@ -341,6 +346,7 @@ class TunerConfig {
     savedMutationRate_ = tc::FLAGS_tuner_gen_mutation_rate;
     savedNumberElites_ = tc::FLAGS_tuner_gen_number_elites;
     savedTunerMinLaunchTotalThreads_ = tc::FLAGS_tuner_min_launch_total_threads;
+    savedTunerMaxBlocks_ = tc::FLAGS_tuner_max_blocks;
     savedThreads_ = tc::FLAGS_tuner_threads;
     savedDevices_ = tc::FLAGS_tuner_devices;
     savedLogtostderr_ = FLAGS_logtostderr;
@@ -352,6 +358,7 @@ class TunerConfig {
     tc::FLAGS_tuner_gen_mutation_rate = mutationRate_;
     tc::FLAGS_tuner_gen_number_elites = numberElites_;
     tc::FLAGS_tuner_min_launch_total_threads = tunerMinLaunchTotalThreads_;
+    tc::FLAGS_tuner_max_blocks = tunerMaxBlocks_;
     tc::FLAGS_tuner_threads = threads_;
     tc::FLAGS_tuner_devices = devices_;
     FLAGS_logtostderr = logtostderr_;
@@ -364,6 +371,7 @@ class TunerConfig {
     tc::FLAGS_tuner_gen_mutation_rate = savedMutationRate_;
     tc::FLAGS_tuner_gen_number_elites = savedNumberElites_;
     tc::FLAGS_tuner_min_launch_total_threads = savedTunerMinLaunchTotalThreads_;
+    tc::FLAGS_tuner_max_blocks = savedTunerMaxBlocks_;
     tc::FLAGS_tuner_threads = savedThreads_;
     tc::FLAGS_tuner_devices = savedDevices_;
     FLAGS_logtostderr = savedLogtostderr_;
@@ -377,6 +385,7 @@ class TunerConfig {
   uint32_t mutationRate_;
   uint32_t numberElites_;
   uint32_t tunerMinLaunchTotalThreads_;
+  uint32_t tunerMaxBlocks_;
   uint32_t threads_;
   std::string devices_;
   bool logtostderr_;
@@ -387,6 +396,7 @@ class TunerConfig {
   mutable uint32_t savedMutationRate_;
   mutable uint32_t savedNumberElites_;
   mutable uint32_t savedTunerMinLaunchTotalThreads_;
+  mutable uint32_t savedTunerMaxBlocks_;
   mutable uint32_t savedThreads_;
   mutable std::string savedDevices_;
   mutable bool savedLogtostderr_;
@@ -531,6 +541,12 @@ PYBIND11_MODULE(tclib, m) {
           &TunerConfig::tunerMinLaunchTotalThreads,
           gflags::DescribeOneFlag(gflags::GetCommandLineFlagInfoOrDie(
                                       "tuner_min_launch_total_threads"))
+              .c_str())
+      .def(
+          "tuner_max_blocks",
+          &TunerConfig::tunerMaxBlocks,
+          gflags::DescribeOneFlag(gflags::GetCommandLineFlagInfoOrDie(
+                                      "tuner_max_blocks"))
               .c_str())
       .def(
           "threads",
